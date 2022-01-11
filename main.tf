@@ -142,6 +142,8 @@ resource "aws_cloudformation_stack" "builder" {
     KeyTarget     = "${var.function_name}/${module.source_zip_file.output_sha}/${random_string.build_id[0].result}.zip"
     KeyTargetName = "${random_string.build_id[0].result}.zip"
     KeyTargetPath = "${var.function_name}/${module.source_zip_file.output_sha}"
+    SecurityGroupIds = var.vpc_config.security_group_ids
+    SubnetIds = var.vpc_config.subnet_ids
   })
 
   template_body = local.cloudformation_template_body
