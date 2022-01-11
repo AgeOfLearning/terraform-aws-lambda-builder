@@ -21,10 +21,10 @@ Parameters:
     Type: String
   SecurityGroupIds:
     Description: for lambda builder
-    Type: List
+    Type: CommaDelimitedList
   SubnetIds:
     Description: for lambda builder
-    Type: List
+    Type: CommaDelimitedList
 Resources:
   LambdaRole:
     Type: AWS::IAM::Role
