@@ -19,6 +19,12 @@ Parameters:
   KeyTargetName:
     Description: S3 key name for the built package zip
     Type: String
+  SecurityGroupIds:
+    Description: for lambda builder
+    Type: List
+  SubnetIds:
+    Description: for lambda builder
+    Type: List
 Resources:
   LambdaRole:
     Type: AWS::IAM::Role
@@ -33,6 +39,8 @@ Resources:
                 - lambda.amazonaws.com
             Action:
               - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
       Policies:
         - PolicyName: CFN
           PolicyDocument:
@@ -77,6 +85,9 @@ Resources:
       Code:
         ZipFile: ${jsonencode(lambda_builder_code)}
       Role: !GetAtt LambdaRole.Arn
+      VpcConfig:
+        SecurityGroupIds: !Ref SecurityGroupIds
+        SubnetIds: !Ref SubnetIds
   LambdaPackage:
     Type: Custom::LambdaPackage
     Properties:
