@@ -76,6 +76,8 @@ locals {
     Bucket    = var.s3_bucket
     KeyPrefix = var.function_name
     KeySource = local.source_zip_file_s3_key
+    SecurityGroupIds = var.vpc_config.security_group_ids
+    SubnetIds = var.vpc_config.subnet_ids
   }
   codebuild_cloudformation_template_body = var.enabled && var.build_mode == "CODEBUILD" ? templatefile("${path.module}/codebuild_builder/cfn.yaml.tmpl", {
     codebuild_environment_compute_type  = var.codebuild_environment_compute_type
@@ -140,8 +142,6 @@ resource "aws_cloudformation_stack" "builder" {
     KeyTarget     = "${var.function_name}/${module.source_zip_file.output_sha}/${random_string.build_id[0].result}.zip"
     KeyTargetName = "${random_string.build_id[0].result}.zip"
     KeyTargetPath = "${var.function_name}/${module.source_zip_file.output_sha}"
-    SecurityGroupIds = var.vpc_config.security_group_ids
-    SubnetIds = var.vpc_config.subnet_ids
   })
 
   template_body = local.cloudformation_template_body
