@@ -64,7 +64,7 @@ resource "aws_s3_object" "source_zip_file" {
 }
 
 locals {
-  source_zip_file_s3_key = var.enabled && contains(["CODEBUILD", "LAMBDA", "S3"], var.build_mode) ? aws_s3_bucket_object.source_zip_file[0].key : null
+  source_zip_file_s3_key = var.enabled && contains(["CODEBUILD", "LAMBDA", "S3"], var.build_mode) ? aws_s3_object.source_zip_file[0].key : null
 }
 
 ###############################################
